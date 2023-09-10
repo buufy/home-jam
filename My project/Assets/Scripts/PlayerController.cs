@@ -7,8 +7,14 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public float walkSpeed = 5f;
-    public float jumpSpeed = 8f;
+    public float jumpSpeed = 5f;
     Vector2 moveInput;
+
+    public Transform groundCheck;
+    public float groundCheckRadius;
+    public LayerMask groundLayer;
+    private bool isTouchingGround;
+
 
     public bool IsMoving { get; private set; }
 
@@ -28,7 +34,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButtonDown("Jump"))
+        isTouchingGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+        if(Input.GetButtonDown("Jump") && isTouchingGround)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
         }
